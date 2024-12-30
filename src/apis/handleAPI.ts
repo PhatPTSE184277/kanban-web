@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import axiosClient from "./AxiosClient";
+import axiosClient from "./axiosClient";
 
 const handleAPI = async (url: string, data?: any, method?: 'post' | 'put' | 'get' | 'delete') => {   
   return await axiosClient(url, {

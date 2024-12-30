@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Card, Checkbox, Form, Input, message, Space, Typography } from "antd";
+import { Button, Card, Checkbox, Form, Input, Space, Typography } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import SocialLogin from "./components/SocialLogin";
 import handleAPI from "../../apis/handleAPI";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { addAuth } from "../../redux/reducers/authReducer";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -11,16 +15,19 @@ const Login = () => {
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
   const [isRemember, setIsRemember] = useState(false);
+  const dispatch = useDispatch();
 
   const handleLogin = async (values: { email: string; password: string }) => {
     setIsLoading(true);
-    const api = `/auth/register`;
     try {
-      const res = await handleAPI(api, values, "post");
-      console.log(res);
+      const res: any = await handleAPI(`auth/login`, values, "post");
+      if (res.data) {
+        toast.success(res.message);
+        res.data && dispatch(addAuth(res.data));
+      }
     } catch (error: any) {
       console.log(error);
-      message.error(error.response.data.message);
+      toast.error(error.message);
     }finally{
       setIsLoading(false);
     }
