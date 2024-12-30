@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Login, SignUp } from "../screens";
+import Title from "antd/es/typography/Title";
 
 const AuthRouter = () => {
   return (
@@ -13,7 +14,7 @@ const AuthRouter = () => {
             width: 256,
             objectFit: "cover",
           }} />
-            <h1>KANBAN</h1>
+            <Title>KANBAN</Title>
           </div>
           <div className="col content-center">
             <BrowserRouter>

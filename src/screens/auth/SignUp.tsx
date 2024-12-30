@@ -1,7 +1,9 @@
-import { Button, Card, Form, Input, Space, Typography } from "antd";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Button, Card, Form, Input, message, Space, Typography } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import SocialLogin from "./components/SocialLogin";
+import handleAPI from "../../apis/handleAPI";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -9,9 +11,18 @@ const SignUp = () => {
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (values: { email: string; password: string }) => {
+  const handleRegister = async (values: { email: string; password: string }) => {
     setIsLoading(true);
-    console.log(values);
+    const api = `/auth/register`;
+    try {
+      const res = await handleAPI(api, values, "post");
+      console.log(res)
+    } catch (error: any) {
+      console.log(error);
+      message.error(error.response.data.message);
+    }finally{
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -30,7 +41,7 @@ const SignUp = () => {
         <Form
           layout="vertical"
           form={form}
-          onFinish={handleLogin}
+          onFinish={handleRegister}
           disabled={isLoading}
           size="large"
         >
@@ -66,6 +77,15 @@ const SignUp = () => {
                 required: true,
                 message: "Please enter your password!",
               },
+              () => ({
+                validator: (_, value) => {
+                    if (value.length < 6) {
+                      return Promise.reject(new Error('Password must be at least 6 characters'));
+                    }else{
+                      return Promise.resolve();
+                    }
+                }
+              })
             ]}
           >
             <Input.Password maxLength={100} placeholder="Create a password"/>
@@ -73,13 +93,15 @@ const SignUp = () => {
         </Form>
 
         <div className="mt-4 mb-3">
-          <Button
+          <Button 
+            loading={isLoading}
+            disabled={isLoading}
             type="primary"
             style={{ width: "100%" }}
             size="large"
             onClick={() => form.submit()}
           >
-            Login
+            Sign up
           </Button>
         </div>
 

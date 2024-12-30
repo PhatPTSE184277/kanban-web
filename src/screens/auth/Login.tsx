@@ -1,7 +1,9 @@
-import { Button, Card, Checkbox, Form, Input, Space, Typography } from "antd";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Button, Card, Checkbox, Form, Input, message, Space, Typography } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import SocialLogin from "./components/SocialLogin";
+import handleAPI from "../../apis/handleAPI";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -10,22 +12,36 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRemember, setIsRemember] = useState(false);
 
-  const handleLogin = (values: { email: string; password: string }) => {
+  const handleLogin = async (values: { email: string; password: string }) => {
     setIsLoading(true);
-    console.log(values);
+    const api = `/auth/register`;
+    try {
+      const res = await handleAPI(api, values, "post");
+      console.log(res);
+    } catch (error: any) {
+      console.log(error);
+      message.error(error.response.data.message);
+    }finally{
+      setIsLoading(false);
+    }
   };
 
   return (
     <div>
-      <Card style={{ width: 410}}>
+      <Card style={{ width: 410 }}>
         <div className="text-center">
           <img
-          className="mb-3" 
-          src={"https://firebasestorage.googleapis.com/v0/b/f-salon-51786.appspot.com/o/kanban-logo.png?alt=media&token=7649839d-e485-4eb0-aaba-b03b8031aa04"} 
-          alt="Logo Kanban" 
-          style={{width: 48, height: 48}}/>
+            className="mb-3"
+            src={
+              "https://firebasestorage.googleapis.com/v0/b/f-salon-51786.appspot.com/o/kanban-logo.png?alt=media&token=7649839d-e485-4eb0-aaba-b03b8031aa04"
+            }
+            alt="Logo Kanban"
+            style={{ width: 48, height: 48 }}
+          />
           <Title level={2}>Log in to your account</Title>
-          <Paragraph type="secondary">Welcome back! Please enter your details.</Paragraph>
+          <Paragraph type="secondary">
+            Welcome back! Please enter your details.
+          </Paragraph>
         </div>
 
         <Form
@@ -42,30 +58,35 @@ const Login = () => {
               {
                 required: true,
                 message: "Please enter a valid email!",
-              } 
+              },
             ]}
           >
-            <Input allowClear maxLength={100} type="email" placeholder="Enter your email"/>
+            <Input
+              allowClear
+              maxLength={100}
+              type="email"
+              placeholder="Enter your email"
+            />
           </Form.Item>
-            <Form.Item
+          <Form.Item
             name={"password"}
             label="Password"
             rules={[
               {
-              required: true,
-              message: "Please enter your password!",
+                required: true,
+                message: "Please enter your password!",
               },
             ]}
-            >
-            <Input.Password maxLength={100} placeholder="••••••••"/>
-            </Form.Item>
+          >
+            <Input.Password maxLength={100} placeholder="••••••••" />
+          </Form.Item>
         </Form>
 
         <div className="row">
           <div className="col">
             <Checkbox
-              value={isRemember}
-              onChange={(val) => setIsRemember(val.target.checked)}
+              checked={isRemember}
+              onChange={(e) => setIsRemember(e.target.checked)}
             >
               Remember for 30 days
             </Checkbox>
@@ -78,6 +99,8 @@ const Login = () => {
 
         <div className="mt-4 mb-3">
           <Button
+            disabled={isLoading}
+            loading={isLoading}
             type="primary"
             style={{ width: "100%" }}
             size="large"
@@ -87,12 +110,12 @@ const Login = () => {
           </Button>
         </div>
 
-        <SocialLogin/>
+        <SocialLogin />
         <div className="mt-4 text-center">
-            <Space>
-              <Text type="secondary">Don't have an account?</Text>
-              <Link to="/sign-up">Sign Up</Link>
-            </Space>
+          <Space>
+            <Text type="secondary">Don't have an account?</Text>
+            <Link to="/sign-up">Sign Up</Link>
+          </Space>
         </div>
       </Card>
     </div>
