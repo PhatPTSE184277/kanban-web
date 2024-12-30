@@ -10,6 +10,7 @@ const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = (values: { email: string; password: string }) => {
+    setIsLoading(true);
     console.log(values);
   };
 
@@ -17,6 +18,11 @@ const SignUp = () => {
     <div>
       <Card style={{ width: 410}}>
         <div className="text-center">
+        <img
+          className="mb-3" 
+          src={"https://firebasestorage.googleapis.com/v0/b/f-salon-51786.appspot.com/o/kanban-logo.png?alt=media&token=7649839d-e485-4eb0-aaba-b03b8031aa04"} 
+          alt="Logo Kanban" 
+          style={{width: 48, height: 48}}/>
           <Title level={2}>Create an account</Title>
           <Paragraph type="secondary">Start your 30-day free trial.</Paragraph>
         </div>

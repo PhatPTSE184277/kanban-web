@@ -6,8 +6,14 @@ const AuthRouter = () => {
     <>
       <div className="container-fluid">
         <div className="row">
-          <div className="col">
-            <img src="" alt="" />
+          <div className="col d-none d-lg-block text-center" style={{ margin: "auto" }}>
+            <img src={"https://firebasestorage.googleapis.com/v0/b/f-salon-51786.appspot.com/o/kanban-logo.png?alt=media&token=7649839d-e485-4eb0-aaba-b03b8031aa04"} 
+          alt="Logo Kanban"
+          style={{
+            width: 256,
+            objectFit: "cover",
+          }} />
+            <h1>KANBAN</h1>
           </div>
           <div className="col content-center">
             <BrowserRouter>
