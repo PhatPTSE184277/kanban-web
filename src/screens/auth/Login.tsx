@@ -8,6 +8,7 @@ import handleAPI from "../../apis/handleAPI";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addAuth } from "../../redux/reducers/authReducer";
+import { localDataNames } from "../../constants/appInfos";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -17,6 +18,7 @@ const Login = () => {
   const [isRemember, setIsRemember] = useState(false);
   const dispatch = useDispatch();
 
+
   const handleLogin = async (values: { email: string; password: string }) => {
     setIsLoading(true);
     try {
@@ -24,7 +26,10 @@ const Login = () => {
       if (res.data) {
         toast.success(res.message);
         res.data && dispatch(addAuth(res.data));
+        if (isRemember) {
+          localStorage.setItem(localDataNames.authData, JSON.stringify(res.data));
       }
+    }
     } catch (error: any) {
       console.log(error);
       toast.error(error.message);
@@ -117,7 +122,7 @@ const Login = () => {
           </Button>
         </div>
 
-        <SocialLogin />
+        <SocialLogin isRemember={isRemember}/>
         <div className="mt-4 text-center">
           <Space>
             <Text type="secondary">Don't have an account?</Text>

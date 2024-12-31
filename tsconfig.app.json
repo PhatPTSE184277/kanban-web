@@ -6,9 +6,6 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-    "paths": {
-      "@/*": ["./src/*"]
-    },
     
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -25,5 +22,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "redux/reducers", "**/*.ts", "**/*.tsx"]
+  "include": ["src"]
 }
