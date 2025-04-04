@@ -11,3 +11,81 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.content-center{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-button{
+  background-color: #F15E2B;
+  border-color: #F15E2B;
+  color: #fff;
+}
+
+.custom-button:hover{
+  background-color: #fff !important;
+  border-color: #F15E2B !important;
+  color: #F15E2B !important;
+}
+
+.social-button:hover{
+  border-color: #F15E2B !important;
+  color: #F15E2B !important;
+}
+
+.custom-input:hover{
+  border-color: #F15E2B !important;
+}
+
+.custom-input:focus,
+.custom-input-focused {
+  border-color: #F15E2B !important;
+  box-shadow: 0 0 0 2px rgba(241, 94, 43, 0.2); /* hiệu ứng shadow nhẹ */
+  outline: none;
+}
+
+
+.custom-link{
+  color: #F15E2B;
+}
+
+.custom-link:hover{
+  color: #F15E2B !important;
+}
+
+/* Hover khi chưa tick */
+.custom-checkbox:hover .ant-checkbox-inner,
+.custom-checkbox .ant-checkbox-input:hover + .ant-checkbox-inner {
+  border-color: #F15E2B;
+}
+
+/* Checkbox đã tick */
+.custom-checkbox .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #F15E2B;
+  border-color: #F15E2B;
+}
+
+/* Hover khi đã tick - override màu xanh của AntD */
+.custom-checkbox .ant-checkbox-checked:hover .ant-checkbox-inner,
+.custom-checkbox .ant-checkbox-input:checked:hover + .ant-checkbox-inner {
+  background-color: #F15E2B!important;
+  border-color: #F15E2B!important;
+}
+
+/* Bỏ border mặc định khi checked */
+.custom-checkbox .ant-checkbox-checked::after {
+  border: none;
+}
+
+/* Hover label chữ cũng đổi màu */
+.custom-checkbox:hover .ant-checkbox + span {
+  color: #F15E2B;
+  cursor: pointer;
+}
+
+.head-text{
+  color: #F15E2B !important;
+}
