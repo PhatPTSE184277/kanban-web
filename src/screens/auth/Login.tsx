@@ -1,18 +1,38 @@
-import { Button, Card, Checkbox, Form, Input, Space, Typography } from 'antd';
+import { Button, Card, Checkbox, Form, Input, Space, Spin, Typography } from 'antd';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import SocialLogin from './components/SocialLogin';
+import axiosClient from '../../apis/axiosClient';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { addAuth } from '../../reduxs/reducers/authReducer';
+import { localDataNames } from '../../constants/appInfos';
 
 const { Title, Paragraph, Text } = Typography;
 
 const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isRemember, setIsRemember] = useState(false);
-
+    const dispatch = useDispatch();
     const [form] = Form.useForm();
 
-    const handleLogin = (values: { email: String; password: String }) => {
-        console.log(values);
+    const handleLogin = async (values: { email: String; password: String }) => {
+        setIsLoading(true);
+       try {
+        const response = await axiosClient.post('auth/login', values);
+        if (response.data.data) {
+            toast.success(response.data.message);
+            dispatch(addAuth(response.data.data));
+
+            if (isRemember) {
+                 localStorage.setItem(localDataNames.authData, JSON.stringify(response.data.data));
+            }
+        }
+       } catch (error: any) {
+        toast.error(error.response.data.message);
+       }finally{
+        setIsLoading(false);
+       }
     };
 
     return (
@@ -77,7 +97,7 @@ const Login = () => {
                     </Form.Item>
                 </Form>
 
-                <div className='row'>
+                <div className='row mt-5'>
                     <div className='col'>
                         <Checkbox
                             className='custom-checkbox'
@@ -96,6 +116,7 @@ const Login = () => {
 
                 <div className='mt-4 mb-3'>
                     <Button
+                        loading={isLoading}
                         className='custom-button'
                         style={{ width: '100%' }}
                         size='large'
@@ -104,7 +125,7 @@ const Login = () => {
                         Login
                     </Button>
                 </div>
-                <SocialLogin/>
+                <SocialLogin isRemember={isRemember}/>
                 <div className="mt-4 text-center">
                     <Space>
                         <Text type='secondary'>Don’t have an account?</Text>
