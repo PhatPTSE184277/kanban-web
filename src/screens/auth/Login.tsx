@@ -1,5 +1,5 @@
-import { Button, Card, Checkbox, Form, Input, Space, Spin, Typography } from 'antd';
-import React, { useState } from 'react';
+import { Button, Card, Checkbox, Form, Input, Space, Typography } from 'antd';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import SocialLogin from './components/SocialLogin';
 import axiosClient from '../../apis/axiosClient';

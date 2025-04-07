@@ -1,9 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import axios from "axios";
-import { config } from "process";
 import queryString from "query-string";
+import { localDataNames } from "../constants/appInfos";
 
 const baseURL = `http://localhost:8080/`;
+
+const getAccessToken = () => {
+    const res = localStorage.getItem(localDataNames.authData);
+
+    return res ? JSON.parse(res).token : '';
+};
 
 const axiosClient = axios.create({
     baseURL,
@@ -11,14 +17,15 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(async (config: any) => {
+    const accessToken = getAccessToken();
+
     config.headers = {
-        Authorization: '',
+        Authorization:  accessToken ? `Bearer ${accessToken}` : '',
         Accept: 'application/json',
         ...config.headers,
     };
 
     config.data;
-
     return config;
 });
 
