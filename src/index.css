@@ -89,3 +89,33 @@ code {
 .head-text{
   color: #F15E2B !important;
 }
+
+.ant-menu-item-icon.MuiSvgIcon-root {
+  font-size: 20px !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.ant-menu-title-content a:hover {
+  text-decoration: none;
+}
+
+/* Màu cam khi item được chọn */
+.ant-menu-item-selected {
+  color: #F15E2B !important;
+}
+
+/* Nếu muốn icon cũng thành màu cam */
+.ant-menu-item-selected .ant-menu-item-icon {
+  color: #F15E2B !important;
+}
+
+/* Nếu dùng MUI icon, cần thêm cái này nữa */
+.ant-menu-item-selected .MuiSvgIcon-root {
+  color: #F15E2B !important;
+}
+
+.ant-input:hover {
+  color: #F15E2B;
+}
+

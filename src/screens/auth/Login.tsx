@@ -6,7 +6,7 @@ import axiosClient from '../../apis/axiosClient';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { addAuth } from '../../reduxs/reducers/authReducer';
-import { localDataNames } from '../../constants/appInfos';
+import { appInfo, localDataNames } from '../../constants/appInfos';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -18,27 +18,35 @@ const Login = () => {
 
     const handleLogin = async (values: { email: String; password: String }) => {
         setIsLoading(true);
-       try {
-        const response = await axiosClient.post('auth/login', values);
-        if (response.data.data) {
-            toast.success(response.data.message);
-            dispatch(addAuth(response.data.data));
+        try {
+            const response = await axiosClient.post('auth/login', values);
+            if (response.data.data) {
+                toast.success(response.data.message);
+                dispatch(addAuth(response.data.data));
 
-            if (isRemember) {
-                 localStorage.setItem(localDataNames.authData, JSON.stringify(response.data.data));
+                if (isRemember) {
+                    localStorage.setItem(
+                        localDataNames.authData,
+                        JSON.stringify(response.data.data)
+                    );
+                }
             }
+        } catch (error: any) {
+            toast.error(error.response.data.message);
+        } finally {
+            setIsLoading(false);
         }
-       } catch (error: any) {
-        toast.error(error.response.data.message);
-       }finally{
-        setIsLoading(false);
-       }
     };
 
     return (
         <>
-            <Card style={{width: '60%'}}>
+            <Card style={{ width: '60%' }}>
                 <div className='text-center'>
+                    <img
+                        src={appInfo.logo}
+                        alt={appInfo.title}
+                        style={{ width: 48, height: 48 }}
+                    />
                     <Title level={2}>Log in to your account</Title>
                     <Paragraph type='secondary'>
                         Welcome back! Please enter your details.
@@ -125,8 +133,8 @@ const Login = () => {
                         Login
                     </Button>
                 </div>
-                <SocialLogin isRemember={isRemember}/>
-                <div className="mt-4 text-center">
+                <SocialLogin isRemember={isRemember} />
+                <div className='mt-4 text-center'>
                     <Space>
                         <Text type='secondary'>Don’t have an account?</Text>
                         <Link className='custom-link' to={'/sign-up'}>

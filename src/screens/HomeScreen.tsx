@@ -39,7 +39,7 @@ const HomeScreen = () => {
 
   return (
     <>
-      <Button onClick={getProducts}>Logout</Button>
+      <Button onClick={logout}>Logout</Button>
     </>
   )
 }

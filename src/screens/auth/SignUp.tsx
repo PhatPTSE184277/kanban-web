@@ -1,11 +1,11 @@
-import { Button, Card, Form, Input, Space, Spin, Typography } from 'antd';
+import { Button, Card, Form, Input, Space, Typography } from 'antd';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SocialLogin from './components/SocialLogin';
 import axiosClient from '../../apis/axiosClient';
-import { toast } from 'react-toastify'; 
+import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
-import { localDataNames } from '../../constants/appInfos';
+import { appInfo, localDataNames } from '../../constants/appInfos';
 import { addAuth } from '../../reduxs/reducers/authReducer';
 
 const { Title, Paragraph, Text } = Typography;
@@ -17,19 +17,26 @@ const SignUp = () => {
 
     const [form] = Form.useForm();
 
-    const handleSignup = async (values: { name: String, email: String; password: String }) => {
+    const handleSignup = async (values: {
+        name: String;
+        email: String;
+        password: String;
+    }) => {
         setIsLoading(true);
         try {
             const response = await axiosClient.post('auth/register', values);
             if (response.data.data) {
-                localStorage.setItem(localDataNames.authData, JSON.stringify(response.data.data));
+                localStorage.setItem(
+                    localDataNames.authData,
+                    JSON.stringify(response.data.data)
+                );
                 dispatch(addAuth(response.data.data));
                 navigate('/');
             }
             toast.success(response.data.message);
         } catch (error: any) {
             toast.error(error.response.data.message);
-        }finally{
+        } finally {
             setIsLoading(false);
         }
     };
@@ -38,13 +45,18 @@ const SignUp = () => {
         <>
             <Card style={{ width: '60%' }}>
                 <div className='text-center'>
+                    <img
+                        src={appInfo.logo}
+                        alt={appInfo.title}
+                        style={{ width: 48, height: 48 }}
+                    />
                     <Title level={2}>Create an account</Title>
                     <Paragraph type='secondary'>
                         Start your 30-day free trial.
                     </Paragraph>
                 </div>
 
-                <Form 
+                <Form
                     layout='vertical'
                     form={form}
                     onFinish={handleSignup}
@@ -110,14 +122,19 @@ const SignUp = () => {
                             {
                                 required: true,
                                 message: 'Please enter your password!'
-                            }, () => ({
+                            },
+                            () => ({
                                 validator: (_, value) => {
                                     if (!value) {
                                         return Promise.resolve();
                                     }
                                     if (value.length < 6) {
-                                        return Promise.reject(new Error('The password must be at least 6 characters'))
-                                    }else{
+                                        return Promise.reject(
+                                            new Error(
+                                                'The password must be at least 6 characters'
+                                            )
+                                        );
+                                    } else {
                                         return Promise.resolve();
                                     }
                                 }
@@ -150,12 +167,19 @@ const SignUp = () => {
                             },
                             ({ getFieldValue }) => ({
                                 validator(_, value) {
-                                  if (!value || getFieldValue('password') === value) {
-                                    return Promise.resolve();
-                                  }
-                                  return Promise.reject(new Error('The new password that you entered do not match!'));
-                                },
-                              }),
+                                    if (
+                                        !value ||
+                                        getFieldValue('password') === value
+                                    ) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(
+                                        new Error(
+                                            'The new password that you entered do not match!'
+                                        )
+                                    );
+                                }
+                            })
                         ]}
                     >
                         <Input
