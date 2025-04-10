@@ -1,6 +1,6 @@
 import { Layout, Menu, MenuProps, Typography } from 'antd';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import BarChartIcon from '@mui/icons-material/BarChart';
@@ -15,41 +15,44 @@ const { Sider } = Layout;
 const { Text } = Typography;
 
 const SiderComponent = () => {
+    const location = useLocation();
+    const path = location.pathname;
+
     const items: MenuItem[] = [
         {
-            key: 'dashboard',
+            key: '/',
             label: <Link to={'/'}>Dashboard</Link>,
             icon: <HomeIcon />
         },
         {
-            key: 'inventory',
+            key: '/inventory',
             label: <Link to={'/inventory'}>Inventory</Link>,
             icon: <AssignmentIcon />
         },
         {
-            key: 'report',
+            key: '/report',
             label: <Link to={'/reports'}>Reports</Link>,
             icon: <BarChartIcon />
         },
         {
-            key: 'suppliers',
+            key: '/suppliers',
             label: <Link to={'/suppliers'}>Suppliers</Link>,
             icon: <PersonIcon />
         },
         {
-            key: 'orders',
+            key: '/orders',
             label: <Link to={'/orders'}>Orders</Link>,
             icon: <Inventory2Icon />
         },
         {
-            key: 'manageStore',
+            key: '/manage-store',
             label: <Link to={'/manage-store'}>Manage Store</Link>,
             icon: <DescriptionIcon />
         }
     ];
 
     return (
-        <Sider theme='light' style={{height: '100vh'}}>
+        <Sider width={250} theme='light' style={{height: '100vh'}}>
             <div className='p-2 d-flex align-items-center'>
                 <img src={appInfo.logo} alt={appInfo.title} width={48} />
                 <Text
@@ -62,7 +65,7 @@ const SiderComponent = () => {
                     {appInfo.title}
                 </Text>
             </div>
-            <Menu items={items} theme='light' />
+            <Menu items={items} theme='light' selectedKeys={[path]}/>
         </Sider>
     );
 };

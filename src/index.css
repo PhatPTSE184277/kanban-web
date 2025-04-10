@@ -19,68 +19,89 @@ code {
   align-items: center;
 }
 
-.custom-button{
-  background-color: #F15E2B;
-  border-color: #F15E2B;
-  color: #fff;
+.custom-button {
+  background-color: #F15E2B !important;
+  border-color: #F15E2B !important;
+  color: #fff !important;
+  transition: all 0.3s ease;
 }
 
-.custom-button:hover{
+.custom-button:hover {
   background-color: #fff !important;
   border-color: #F15E2B !important;
   color: #F15E2B !important;
 }
 
-.social-button:hover{
+.custom-button:focus,
+.custom-button:active {
+  background-color: #F15E2B !important;
+  border-color: #F15E2B !important;
+  color: #fff !important;
+  outline: none;
+}
+
+/* Ensure social-button stays black text when inactive */
+.social-button {
+  background-color: #fff !important;
+  border-color: #d9d9d9 !important;
+  color: #000 !important;
+  transition: all 0.3s ease;
+}
+
+.social-button:hover,
+.social-button:focus,
+.social-button:active {
   border-color: #F15E2B !important;
   color: #F15E2B !important;
 }
 
+.social-button.selected {
+  background-color: #F15E2B !important;
+  color: #fff !important;
+  border-color: #F15E2B !important;
+}
+
+
 .custom-input:hover{
   border-color: #F15E2B !important;
+  color: black !important;
 }
 
 .custom-input:focus,
 .custom-input-focused {
   border-color: #F15E2B !important;
-  box-shadow: 0 0 0 2px rgba(241, 94, 43, 0.2); /* hiệu ứng shadow nhẹ */
+  box-shadow: 0 0 0 2px rgba(241, 94, 43, 0.2);
   outline: none;
 }
 
-
 .custom-link{
-  color: #F15E2B;
+  color: #F15E2B !important;
 }
 
 .custom-link:hover{
   color: #F15E2B !important;
 }
 
-/* Hover khi chưa tick */
 .custom-checkbox:hover .ant-checkbox-inner,
 .custom-checkbox .ant-checkbox-input:hover + .ant-checkbox-inner {
   border-color: #F15E2B;
 }
 
-/* Checkbox đã tick */
 .custom-checkbox .ant-checkbox-checked .ant-checkbox-inner {
   background-color: #F15E2B;
   border-color: #F15E2B;
 }
 
-/* Hover khi đã tick - override màu xanh của AntD */
 .custom-checkbox .ant-checkbox-checked:hover .ant-checkbox-inner,
 .custom-checkbox .ant-checkbox-input:checked:hover + .ant-checkbox-inner {
   background-color: #F15E2B!important;
   border-color: #F15E2B!important;
 }
 
-/* Bỏ border mặc định khi checked */
 .custom-checkbox .ant-checkbox-checked::after {
   border: none;
 }
 
-/* Hover label chữ cũng đổi màu */
 .custom-checkbox:hover .ant-checkbox + span {
   color: #F15E2B;
   cursor: pointer;
@@ -100,17 +121,14 @@ code {
   text-decoration: none;
 }
 
-/* Màu cam khi item được chọn */
 .ant-menu-item-selected {
   color: #F15E2B !important;
 }
 
-/* Nếu muốn icon cũng thành màu cam */
 .ant-menu-item-selected .ant-menu-item-icon {
   color: #F15E2B !important;
 }
 
-/* Nếu dùng MUI icon, cần thêm cái này nữa */
 .ant-menu-item-selected .MuiSvgIcon-root {
   color: #F15E2B !important;
 }
@@ -119,3 +137,10 @@ code {
   color: #F15E2B;
 }
 
+.ant-select:not(.ant-select-disabled):hover .ant-select-selector {
+  border-color: #F15E2B !important;
+}
+
+.ant-select-focused .ant-select-selector {
+  border-color: #F15E2B !important;
+}

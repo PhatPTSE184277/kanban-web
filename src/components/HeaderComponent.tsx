@@ -10,7 +10,7 @@ const HeaderComponent = () => {
             <div className='col'>
                 <Input
                     className='custom-input'
-                    placeholder='Search...'
+                    placeholder='Search product, supplier, order'
                     prefix={
                         <SearchIcon
                             style={{ color: '#aaa', fontSize: '20px' }}
