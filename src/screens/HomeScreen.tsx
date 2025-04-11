@@ -15,11 +15,11 @@ const HomeScreen = () => {
 
   const getProducts = async () => {
     try {
-      const response = await axiosClient.get('storage/products');
+      const response:any = await axiosClient.get('storage/products');
       console.log(response);
     } catch (error: any) {
-      console.log(error.response.data);
-      if (error.response.data.error === "jwt expired") {
+      console.log(error);
+      if (error.response.error === "jwt expired") {
           handleRefeshToken();
       }
     }

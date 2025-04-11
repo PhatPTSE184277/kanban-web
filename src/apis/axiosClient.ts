@@ -28,7 +28,7 @@ axiosClient.interceptors.request.use(async (config: any) => {
     return {...config, data: config.data ?? null};
 });
 
-axios.interceptors.response.use(res => {
+axiosClient.interceptors.response.use(res => {
     if (res.data && res.status >= 200 && res.status < 300) {
         return res.data;
     }else{

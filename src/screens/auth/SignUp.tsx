@@ -24,18 +24,18 @@ const SignUp = () => {
     }) => {
         setIsLoading(true);
         try {
-            const response = await axiosClient.post('auth/register', values);
-            if (response.data.data) {
+            const response: any = await axiosClient.post('auth/register', values);
+            if (response.data) {
                 localStorage.setItem(
                     localDataNames.authData,
-                    JSON.stringify(response.data.data)
+                    JSON.stringify(response.data)
                 );
-                dispatch(addAuth(response.data.data));
+                dispatch(addAuth(response.data));
                 navigate('/');
             }
-            toast.success(response.data.message);
+            toast.success(response.message);
         } catch (error: any) {
-            toast.error(error.response.data.message);
+            toast.error(error.response.message);
         } finally {
             setIsLoading(false);
         }

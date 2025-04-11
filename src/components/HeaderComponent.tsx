@@ -1,10 +1,33 @@
-import { Avatar, Button, Input, Space } from 'antd';
-import React from 'react';
+import { Avatar, Button, Dropdown, Input, MenuProps, Space } from 'antd';
 import SearchIcon from '@mui/icons-material/Search';
 import { NotificationsOutlined } from '@mui/icons-material';
 import { color } from '../constants/color';
+import { useDispatch, useSelector } from 'react-redux';
+import { authSelector, removeAuth } from '../reduxs/reducers/authReducer';
+import { auth } from '../firebase/firebaseConfig';
+import { useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
 
 const HeaderComponent = () => {
+    const user = useSelector(authSelector);
+    const dispatch = useDispatch();
+
+    const navigate = useNavigate();
+
+    const items: MenuProps['items'] = [
+        {
+            key: 'logout',
+            label: 'Logout',
+            onClick: async () => {
+                signOut(auth);
+                dispatch(removeAuth({}));
+                localStorage.clear();
+
+                navigate('/');
+            }
+        }
+    ]
+
     return (
         <div className='p-2 row d-flex justify-content-between align-items-center bg-white'>
             <div className='col'>
@@ -34,12 +57,14 @@ const HeaderComponent = () => {
                             />
                         }
                     />
-                    <Avatar
+                   <Dropdown menu={{ items }}>
+                   <Avatar
                         src={
-                            'https://scontent.fsgn20-1.fna.fbcdn.net/v/t39.30808-1/295247187_1425207171224227_9133611363684535476_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=110&ccb=1-7&_nc_sid=e99d92&_nc_ohc=jHc1n70JSqUQ7kNvwEwccyD&_nc_oc=Adl8x7oM4RYV0TVgahDyC8x8tTWiUmKgaBF8ZCgVwaT_213CX1lTJfpuYPRrmEX7D7g-WwXw6gEAX7NA9nK2qRRH&_nc_zt=24&_nc_ht=scontent.fsgn20-1.fna&_nc_gid=MeLae38gBUnvZ5o8p6lzDw&oh=00_AfFrDAgbci_62wPUOu6V4wefynOeJTeoNHD52jOAD6uiig&oe=67FC3264'
+                            user.photoUrl
                         }
                         size={40}
                     />
+                   </Dropdown>
                 </Space>
             </div>
         </div>

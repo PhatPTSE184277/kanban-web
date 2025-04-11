@@ -19,20 +19,20 @@ const Login = () => {
     const handleLogin = async (values: { email: String; password: String }) => {
         setIsLoading(true);
         try {
-            const response = await axiosClient.post('auth/login', values);
-            if (response.data.data) {
-                toast.success(response.data.message);
-                dispatch(addAuth(response.data.data));
+            const response: any = await axiosClient.post('auth/login', values);
+            if (response.data) {
+                toast.success(response.message);
+                dispatch(addAuth(response.data));
 
                 if (isRemember) {
                     localStorage.setItem(
                         localDataNames.authData,
-                        JSON.stringify(response.data.data)
+                        JSON.stringify(response.data)
                     );
                 }
             }
         } catch (error: any) {
-            toast.error(error.response.data.message);
+            toast.error(error.response.message);
         } finally {
             setIsLoading(false);
         }

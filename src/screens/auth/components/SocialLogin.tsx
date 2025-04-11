@@ -10,9 +10,9 @@ import { addAuth } from '../../../reduxs/reducers/authReducer';
 
 const provider = new GoogleAuthProvider();
 provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-provider.setCustomParameters({
-    login_hint: '25.12t1.phamtanphat@gmail.com'
-});
+// provider.setCustomParameters({
+//     login_hint: '25.12t1.phamtanphat@gmail.com'
+// });
 
 interface Props {
     isRemember?: boolean;
@@ -34,17 +34,18 @@ const SocialLogin = (props: Props) => {
                 if (user) {
                     const data = {
                         name: user.displayName,
-                        email: user.email
+                        email: user.email,
+                        photoUrl: user.photoURL
                     };
 
                     try {
-                        const response = await axiosClient.post(
+                        const response: any = await axiosClient.post(
                             'auth/google-login',
                             data
                         );
-                        if (response.data.data) {
-                            toast.success(response.data.message);
-                            dispatch(addAuth(response.data.data));
+                        if (response.data) {
+                            toast.success(response.message);
+                            dispatch(addAuth(response.data));
                         };
                         
                         if (isRemember) {

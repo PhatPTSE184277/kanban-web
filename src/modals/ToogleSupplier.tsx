@@ -1,12 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Avatar, Button, Form, Input, Modal, Select, Typography } from 'antd';
 import { User } from 'iconsax-react';
-import React, { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { color } from '../constants/color';
 import { uploadFile } from '../utils/uploadFile';
 import { replaceName } from '../utils/replaceName';
 import axiosClient from '../apis/axiosClient';
 import { toast } from 'react-toastify';
 import { SupplierModel } from '../models/SupplierModel';
+import { FormModel } from '../models/FormModel';
+import FormItem from '../components/FormItem';
 
 interface Props {
     visible: boolean;
@@ -21,38 +24,81 @@ const ToogleSupplier = (props: Props) => {
     const { visible, onClose, onAddNew, supplier } = props;
 
     const [isLoading, setIsLoading] = useState(false);
+    const [isGetting, setIsGetting] = useState(false);
     const [isTaking, setIsTaking] = useState<boolean>();
+    const [formData, setFormData] = useState<FormModel>();
     const [file, setFile] = useState<any>();
 
     const [form] = Form.useForm();
     const inpRef = useRef<any>();
 
+    useEffect(() => {
+        getFormData();
+    }, []);
+
+    useEffect(() => {
+        if (supplier) {
+            form.setFieldsValue(supplier);
+            setIsTaking(supplier.isTaking === 1 ? true : false);
+            setFile(undefined);
+        }
+    }, [supplier]);
+
     const addNewSupplier = async (values: any) => {
-        setIsLoading(true);
+        // setIsLoading(true);
 
         const data: any = {};
-        for(let i in values){
-            data[i] = values[i] ?? ''
+        for (let i in values) {
+            data[i] = values[i] ?? '';
         }
         data.price = values.price ? parseInt(values.price) : 0;
-        data.isTaking = isTaking ? 1 : 0;
-        
+        data.isTaking = values.isTaking ? 1 : 0;
+
         if (file) {
             data.photoUrl = await uploadFile(file);
-        };
+        }
         data.slug = replaceName(values.name);
+        console.log(data)
 
         try {
-            const response = await axiosClient.post('supplier/add-new', data);
+          if (supplier) {
+            const response: any = await axiosClient.put(
+                'supplier/update',
+                data
+            );
             if (response.data) {
-                toast.success(response.data.message);
-                onAddNew(response.data.data);
+                toast.success(response.message);
                 handleClose();
+            }
+          }else {
+            const response: any = await axiosClient.post(
+                'supplier/add-new',
+                data
+            );
+            if (response.data) {
+                toast.success(response.message);
+                onAddNew(response.data);
+                handleClose();
+            }
+          }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const getFormData = async () => {
+        setIsGetting(true);
+        try {
+            const response = await axiosClient.get('supplier/get-form');
+            if (response.data) {
+                setFormData(response.data);
             }
         } catch (error) {
             console.log(error);
-        }finally{
-            setIsLoading(false);
+        } finally {
+            setIsGetting(false);
         }
     };
 
@@ -66,14 +112,15 @@ const ToogleSupplier = (props: Props) => {
     return (
         <>
             <Modal
+                loading={isGetting}
                 closable={!isLoading}
                 open={visible}
                 centered
                 onClose={handleClose}
                 onCancel={handleClose}
                 onOk={() => form.submit()}
-                title='Add Supplier'
-                okText='Add Supplier'
+                title={supplier ? 'Update supplier' : 'Add Supplier'}
+                okText={supplier ? 'Update supplier' : 'Add Supplier'}
                 cancelText='Discard'
                 okButtonProps={{
                     className: 'custom-button',
@@ -88,6 +135,8 @@ const ToogleSupplier = (props: Props) => {
                 <label htmlFor='inpFile' className='p-2 mb-3 row text-center'>
                     {file ? (
                         <Avatar size={100} src={URL.createObjectURL(file)} />
+                    ) : supplier ? (
+                        <Avatar size={100} src={supplier.photoUrl} />
                     ) : (
                         <Avatar
                             size={100}
@@ -114,86 +163,21 @@ const ToogleSupplier = (props: Props) => {
                         </Button>
                     </div>
                 </label>
-
-                <Form
-                    disabled={isLoading}
-                    onFinish={addNewSupplier}
-                    layout='horizontal'
-                    labelCol={{ span: 6 }}
-                    wrapperCol={{ span: 18 }}
-                    size='middle'
-                    form={form}
-                >
-                    <Form.Item
-                        name={'name'}
-                        label='Supplier name'
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Enter supplier name'
-                            }
-                        ]}
+                {formData && (
+                    <Form
+                        disabled={isLoading}
+                        onFinish={addNewSupplier}
+                        layout={formData.layout}
+                        labelCol={{ span: formData.labelCol }}
+                        wrapperCol={{ span: formData.wrapperCol }}
+                        size='middle'
+                        form={form}
                     >
-                        <Input
-                            className='custom-input'
-                            placeholder='Enter supplier name'
-                        />
-                    </Form.Item>
-
-                    <Form.Item name={'product'} label='Product'>
-                        <Input
-                            className='custom-input'
-                            placeholder='Enter product'
-                        />
-                    </Form.Item>
-
-                    <Form.Item name={'categories'} label='Category'>
-                        <Select
-                            options={[]}
-                            placeholder='Select product category'
-                        />
-                    </Form.Item>
-
-                    <Form.Item name={'price'} label='Buying Price'>
-                        <Input
-                            className='custom-input'
-                            placeholder='Enter buying price'
-                            type='number'
-                        />
-                    </Form.Item>
-
-                    <Form.Item name={'contact'} label='Contact Number'>
-                        <Input
-                            className='custom-input'
-                            placeholder='Enter supplier contact number'
-                        />
-                    </Form.Item>
-
-                    <Form.Item label='Type'>
-                        <div className='mb-2'>
-                            <Button
-                                size='middle'
-                                onClick={() => setIsTaking(false)}
-                                className={
-                                    isTaking === false
-                                        ? 'custom-button'
-                                        : 'social-button'
-                                }
-                            >
-                                Not taking return
-                            </Button>
-                        </div>
-                        <Button
-                            size='middle'
-                            onClick={() => setIsTaking(true)}
-                            className={
-                                isTaking ? 'custom-button' : 'social-button'
-                            }
-                        >
-                            Taking return
-                        </Button>
-                    </Form.Item>
-                </Form>
+                        {formData.formItems.map((item) => (
+                            <FormItem item={item}/>
+                        ))}
+                    </Form>
+                )}
 
                 <div className='d-none'>
                     <input
